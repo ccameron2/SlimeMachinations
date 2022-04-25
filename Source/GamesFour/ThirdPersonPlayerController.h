@@ -35,6 +35,6 @@ private:
 	virtual void CallStrafe(float Value);
 	virtual void CallJump();
 	virtual void CallLookUp(float Value);
-
+	
 
 };

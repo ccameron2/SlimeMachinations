@@ -80,24 +80,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		float GetPlayerLevel();
 
-	UFUNCTION(BlueprintCallable)
-		void LevelUp();
-
-	UFUNCTION(BlueprintCallable)
-		float GetMaxHealth();
-
-	UFUNCTION(BlueprintCallable)
-		float GetMaxEnergy();
-
-	UFUNCTION(BlueprintCallable)
-		float GetMaxMana();
-
-	UFUNCTION(BlueprintCallable)
-		float GetMaxGold();
-
-	UFUNCTION(BlueprintCallable)
-		float GetMaxExperience();
-
 private:
 
 	UPROPERTY(VisibleAnywhere)

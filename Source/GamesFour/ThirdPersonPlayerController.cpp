@@ -23,6 +23,7 @@ void AThirdPersonPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("Strafe", this, &AThirdPersonPlayerController::CallStrafe);
 	InputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AThirdPersonPlayerController::CallJump);
 	InputComponent->BindAxis("Look Up", this, &AThirdPersonPlayerController::CallLookUp);
+	//InputComponent->BindAction("Sprint", EInputEvent::IE_Pressed, this, &AThirdPersonPlayerController::CallSprint);
 
 }
 

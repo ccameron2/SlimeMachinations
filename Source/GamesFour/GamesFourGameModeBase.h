@@ -2,9 +2,12 @@
 
 #pragma once
 
+#include "ResourcePickup.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "GamesFourGameModeBase.generated.h"
+
 
 /**
  * 
@@ -13,5 +16,10 @@ UCLASS()
 class GAMESFOUR_API AGamesFourGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+protected:
+	virtual void StartPlay() override;
+private:
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AResourcePickup> HealthClass;
+
 };

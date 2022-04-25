@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "GameFramework/PawnMovementComponent.h" 
+
 #include "ThirdPersonCharacter.h"
 
 // Sets default values
@@ -41,9 +41,7 @@ void AThirdPersonCharacter::BeginPlay()
 void AThirdPersonCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if(Energy < MaxEnergy){ Energy++; }
-	if (ExpPoints >= MaxExp) { LevelUp(); }
-	
+	Energy++;
 }
 
 // Called to bind functionality to input
@@ -99,37 +97,10 @@ void AThirdPersonCharacter::Fire()
 void AThirdPersonCharacter::Jump()
 {
 	Super::Jump();
-	auto MovementComponent = GetMovementComponent();
-
-	if (Energy > 50 && !MovementComponent->IsFalling())
+	if (Energy > 50)
 	{
-		Energy -= 75;
+		Energy -= 50;
 	}	
-}
-
-float AThirdPersonCharacter::GetMaxHealth()
-{
-	return MaxHealth;
-}
-
-float AThirdPersonCharacter::GetMaxEnergy()
-{
-	return MaxEnergy;
-}
-
-float AThirdPersonCharacter::GetMaxMana()
-{
-	return MaxMana;
-}
-
-float AThirdPersonCharacter::GetMaxGold()
-{
-	return MaxGold;
-}
-
-float AThirdPersonCharacter::GetMaxExperience()
-{
-	return MaxExp;
 }
 
 float AThirdPersonCharacter::GetHealth()
@@ -167,16 +138,6 @@ float AThirdPersonCharacter::GetPlayerLevel()
 	return Level;
 }
 
-void AThirdPersonCharacter::LevelUp()
-{
-	Level++; 
-	ExpPoints = 0.0f; 
-	MaxExp += 5;
-	MaxHealth += 5;
-	MaxMana += 5;
-	MaxEnergy += 5;
-}
-
 float AThirdPersonCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Take Damage"));
@@ -188,7 +149,7 @@ void AThirdPersonCharacter::OnOverlapBegin(class UPrimitiveComponent* Overlapped
 {
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap Begin"));
 		AResourcePickup* resourcePickup = Cast<AResourcePickup>(OtherActor);
 		if (resourcePickup)
 		{
