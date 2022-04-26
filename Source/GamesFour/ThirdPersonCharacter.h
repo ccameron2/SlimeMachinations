@@ -5,7 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "ResourcePickup.h"
+#include "Sparks.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
@@ -44,82 +44,57 @@ public:
 	UPROPERTY(EditAnywhere)
 		float RotationSpeed = 500.0f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float MaxHealth = 100.0f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float MaxEnergy = 100.0f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float MaxExp = 100.0f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float MaxMana = 100.0f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float MaxGold = 100.0f;
 
-	UFUNCTION(BlueprintCallable)
-		float GetHealth();
-
-	UFUNCTION(BlueprintCallable)
-		float GetEnergy();
-
-	UFUNCTION(BlueprintCallable)
-		float GetMana();
-
-	UFUNCTION(BlueprintCallable)
-		float GetGold();
-
-	UFUNCTION(BlueprintCallable)
-		float GetExperience();
-
-	UFUNCTION(BlueprintCallable)
-		float GetLives();
-
-	UFUNCTION(BlueprintCallable)
-		float GetPlayerLevel();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float UpgradeAmount = 20.0f;
 
 	UFUNCTION(BlueprintCallable)
 		void LevelUp();
 
 	UFUNCTION(BlueprintCallable)
-		float GetMaxHealth();
+		bool HasSkillPoints();
 
-	UFUNCTION(BlueprintCallable)
-		float GetMaxEnergy();
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float HealthPoints = MaxHealth;
 
-	UFUNCTION(BlueprintCallable)
-		float GetMaxMana();
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float ExpPoints = 0.0f;
 
-	UFUNCTION(BlueprintCallable)
-		float GetMaxGold();
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float Energy = MaxEnergy;
 
-	UFUNCTION(BlueprintCallable)
-		float GetMaxExperience();
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float Gold = 0.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		float Mana = MaxMana;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int Level = 1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int Lives = 1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int SkillPoints = 0;
 
 private:
 
-	UPROPERTY(VisibleAnywhere)
-		float HealthPoints = MaxHealth;
-
-	UPROPERTY(VisibleAnywhere)
-		float ExpPoints = 0.0f;
-
-	UPROPERTY(VisibleAnywhere)
-		float Energy = MaxEnergy;
-
-	UPROPERTY(VisibleAnywhere)
-		float Gold = 0.0f;
-
-	UPROPERTY(VisibleAnywhere)
-		float Mana = MaxMana;
-
-	UPROPERTY(VisibleAnywhere)
-		int Level = 1;
-
-	UPROPERTY(VisibleAnywhere)
-		int Lives = 1;
+	
 
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
@@ -135,5 +110,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		USpringArmComponent* SpringArm;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<ASparks> MagicClass;
 
 };

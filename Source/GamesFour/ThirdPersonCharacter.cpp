@@ -1,7 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-#include "GameFramework/PawnMovementComponent.h" 
 #include "ThirdPersonCharacter.h"
+#include "ResourcePickup.h"
+#include "SlimeEnemy.h"
+#include "Kismet/Gameplaystatics.h"
+#include "GameFramework/PawnMovementComponent.h" 
 
 // Sets default values
 AThirdPersonCharacter::AThirdPersonCharacter()
@@ -94,6 +96,10 @@ void AThirdPersonCharacter::LookUp(float AxisValue)
 
 void AThirdPersonCharacter::Fire()
 {
+	FVector Location;
+	FTransform Transform;
+	Transform.SetLocation(Location);
+	ASparks* SlimeActor = GetWorld()->SpawnActor<ASparks>(MagicClass, Transform);
 }
 
 void AThirdPersonCharacter::Jump()
@@ -107,74 +113,20 @@ void AThirdPersonCharacter::Jump()
 	}	
 }
 
-float AThirdPersonCharacter::GetMaxHealth()
+
+bool AThirdPersonCharacter::HasSkillPoints()
 {
-	return MaxHealth;
+	if (SkillPoints > 0) { return true; }
+	else { return false; }
 }
 
-float AThirdPersonCharacter::GetMaxEnergy()
-{
-	return MaxEnergy;
-}
-
-float AThirdPersonCharacter::GetMaxMana()
-{
-	return MaxMana;
-}
-
-float AThirdPersonCharacter::GetMaxGold()
-{
-	return MaxGold;
-}
-
-float AThirdPersonCharacter::GetMaxExperience()
-{
-	return MaxExp;
-}
-
-float AThirdPersonCharacter::GetHealth()
-{
-	return HealthPoints;
-}
-
-float AThirdPersonCharacter::GetEnergy()
-{
-	return Energy;
-}
-
-float AThirdPersonCharacter::GetMana()
-{
-	return Mana;
-}
-
-float AThirdPersonCharacter::GetGold()
-{
-	return Gold;
-}
-
-float AThirdPersonCharacter::GetExperience()
-{
-	return ExpPoints;
-}
-
-float AThirdPersonCharacter::GetLives()
-{
-	return Lives;
-}
-
-float AThirdPersonCharacter::GetPlayerLevel()
-{
-	return Level;
-}
 
 void AThirdPersonCharacter::LevelUp()
 {
 	Level++; 
 	ExpPoints = 0.0f; 
-	MaxExp += 5;
-	MaxHealth += 5;
-	MaxMana += 5;
-	MaxEnergy += 5;
+	SkillPoints++;
+	MaxExp += 10;
 }
 
 float AThirdPersonCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -197,9 +149,13 @@ void AThirdPersonCharacter::OnOverlapBegin(class UPrimitiveComponent* Overlapped
 			if (resourcePickup->Type == 2) { if(Energy		 < MaxEnergy ){ Energy++; }}
 			if (resourcePickup->Type == 3) { if(ExpPoints	 < MaxExp	 ){ ExpPoints++; }}
 			if (resourcePickup->Type == 4) { if(Gold		 < MaxGold	 ){ Gold++; }}
-
+			OtherActor->Destroy();
 		}
-		OtherActor->Destroy();
+		else
+		{
+			ASlimeEnemy* slimeEnemy = Cast<ASlimeEnemy>(OtherActor);
+			if (slimeEnemy) { UGameplayStatics::ApplyDamage(OtherActor, 10.0f, GetInstigatorController(), this, UDamageType::StaticClass()); }
+		}
 	}
 }
 

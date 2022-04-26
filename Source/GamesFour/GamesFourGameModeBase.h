@@ -3,7 +3,7 @@
 #pragma once
 
 #include "ResourcePickup.h"
-
+#include "SlimeEnemy.h"
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "GamesFourGameModeBase.generated.h"
@@ -20,6 +20,8 @@ protected:
 	virtual void StartPlay() override;
 private:
 	UPROPERTY(EditAnywhere)
-		TSubclassOf<AResourcePickup> HealthClass;
+		TSubclassOf<AResourcePickup> ResourceClass;
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<ASlimeEnemy> SlimeClass;
 
 };
