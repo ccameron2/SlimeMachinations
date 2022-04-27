@@ -92,9 +92,19 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		int SkillPoints = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float ManaCost = 10.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float ManaRegenTime = 3.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float ManaRegenAmount = 20.0f;
+
 private:
 
-	
+	UFUNCTION()
+		void RegenerateMana();
 
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;

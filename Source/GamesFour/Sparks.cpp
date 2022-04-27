@@ -2,6 +2,8 @@
 
 
 #include "Sparks.h"
+#include "Kismet/GameplayStatics.h"
+#include "EngineUtils.h"
 
 // Sets default values
 ASparks::ASparks()
@@ -24,9 +26,32 @@ void ASparks::BeginPlay()
 void ASparks::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 	//Activate effect every tick
 	Sparks->Activate();
-	auto newLoc = FMath::VInterpTo(GetActorLocation(), GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation(), DeltaTime, 5.0f);
-	SetActorLocation(newLoc);
+
+	TArray<AActor*> Slimes;
+
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), SlimeClass, Slimes);
+	
+	float MinDistance = 999999;
+	ASlimeEnemy* NearestSlime = nullptr;
+
+	for (auto Slime : Slimes)
+	{
+		ASlimeEnemy* SlimeActor = Cast<ASlimeEnemy>(Slime);
+		auto Distance = FVector::Distance(SlimeActor->GetActorLocation(), GetActorLocation());
+		if (Distance < MinDistance)
+		{
+			MinDistance = Distance;
+			NearestSlime = SlimeActor;
+		}
+	}
+
+	if (NearestSlime)
+	{
+		auto NewLocation = FMath::VInterpTo(GetActorLocation(), NearestSlime->GetActorLocation(), DeltaTime, 5.0f);
+		SetActorLocation(NewLocation);
+	}
 }
 

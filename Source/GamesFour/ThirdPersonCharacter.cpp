@@ -36,7 +36,8 @@ AThirdPersonCharacter::AThirdPersonCharacter()
 void AThirdPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	FTimerHandle ManaTimer;
+	GetWorld()->GetTimerManager().SetTimer(ManaTimer, this, &AThirdPersonCharacter::RegenerateMana, ManaRegenTime, true);
 }
 
 // Called every frame
@@ -96,10 +97,14 @@ void AThirdPersonCharacter::LookUp(float AxisValue)
 
 void AThirdPersonCharacter::Fire()
 {
-	FVector Location;
-	FTransform Transform;
-	Transform.SetLocation(Location);
-	ASparks* SlimeActor = GetWorld()->SpawnActor<ASparks>(MagicClass, Transform);
+	if (Mana >= ManaCost)
+	{
+		FVector Location = GetActorLocation();
+		FTransform Transform;
+		Transform.SetLocation(Location);
+		ASparks* SparkActor = GetWorld()->SpawnActor<ASparks>(MagicClass, Transform);
+		Mana -= ManaCost;
+	}
 }
 
 void AThirdPersonCharacter::Jump()
@@ -127,6 +132,14 @@ void AThirdPersonCharacter::LevelUp()
 	ExpPoints = 0.0f; 
 	SkillPoints++;
 	MaxExp += 10;
+}
+
+void AThirdPersonCharacter::RegenerateMana()
+{
+	if (Mana < MaxMana)
+	{
+		Mana += ManaRegenAmount;
+	}
 }
 
 float AThirdPersonCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

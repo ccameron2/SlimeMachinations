@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Particles/ParticleSystemComponent.h" 
+#include "SlimeEnemy.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -27,4 +28,7 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 		UParticleSystemComponent* Sparks;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<ASlimeEnemy> SlimeClass;
 };
