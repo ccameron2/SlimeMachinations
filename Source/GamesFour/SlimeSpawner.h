@@ -2,21 +2,20 @@
 
 #pragma once
 
-#include "Particles/ParticleSystemComponent.h" 
 #include "SlimeEnemy.h"
-#include "Components/SphereComponent.h" 
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Sparks.generated.h"
+#include "SlimeSpawner.generated.h"
 
 UCLASS()
-class GAMESFOUR_API ASparks : public AActor
+class GAMESFOUR_API ASlimeSpawner : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ASparks();
+	ASlimeSpawner();
 
 protected:
 	// Called when the game starts or when spawned
@@ -25,24 +24,23 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
-	UPROPERTY(EditAnywhere)
-		UParticleSystemComponent* Sparks;
+
+	UFUNCTION()
+		void ClearSlimes();
+
+private:
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<ASlimeEnemy> SlimeClass;
 
-	UPROPERTY(EditAnywhere)
-		USphereComponent* SphereCollision;
+	UPROPERTY(VisibleAnywhere)
+		TArray<ASlimeEnemy*> SlimeList;
 
 	UPROPERTY(EditAnywhere)
-		float Damage = 50.0f;
+		float SpawnDelay = 10.0f;
 
 	UPROPERTY(EditAnywhere)
-		float Lifetime = 2.0f;
-
-	UFUNCTION()
-		void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,UPrimitiveComponent* OtherComp,int32 OtherBodyIndex,bool bFromSweep,const FHitResult& SweepResult);
+		FVector SlimeScale = FVector(1.0f,1.0f,1.0f);
 
 	UFUNCTION()
 		void TimeUp();

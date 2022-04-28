@@ -36,5 +36,7 @@ private:
 	virtual void CallJump();
 	virtual void CallLookUp(float Value);
 	
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> UIClass;
 
 };

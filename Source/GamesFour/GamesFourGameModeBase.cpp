@@ -6,22 +6,39 @@
 void AGamesFourGameModeBase::StartPlay()
 {
 	Super::StartPlay();
-	FActorSpawnParameters SpawnParams;
-	FVector Location;
-	FTransform Transform;
-	//FVector Scale = FVector(0.08, 0.08, 0.08);
-	for (int i = 0; i < 1000; i++)
-	{		
-		Location.X = FMath::RandRange(0, 500);
-		Location.Y = FMath::RandRange(0, 500);
-		Location.Z = FMath::RandRange(0, 500);
-		//Transform.SetScale3D(Scale);
-		Transform.SetTranslation(Location);
-		
-		ASlimeEnemy* SlimeActor = GetWorld()->SpawnActor<ASlimeEnemy>(SlimeClass, Transform);
 
-		//AResourcePickup* ResourcePickup = GetWorld()->SpawnActorDeferred<AResourcePickup>(ResourceClass, Transform);
-		//ResourcePickup->Type = FMath::RandRange(0, ResourcePickup->MaterialList.Num() - 1);
-		/*ResourcePickup->FinishSpawning(Transform);*/
+	
+	FTimerHandle LifeTimer;
+	GetWorld()->GetTimerManager().SetTimer(LifeTimer, this, &AGamesFourGameModeBase::TimeUp, SlimeSpawnerCooldown, true);
+		
+	//ASlimeEnemy* SlimeActor = GetWorld()->SpawnActor<ASlimeEnemy>(SlimeClass, Transform);
+
+	//AResourcePickup* ResourcePickup = GetWorld()->SpawnActorDeferred<AResourcePickup>(ResourceClass, Transform);
+	//ResourcePickup->Type = FMath::RandRange(0, ResourcePickup->MaterialList.Num() - 1);
+	//ResourcePickup->FinishSpawning(Transform);
+}
+
+void AGamesFourGameModeBase::TimeUp()
+{
+	FActorSpawnParameters SpawnParams;
+	FTransform Transform;
+
+	FVector Location;
+	Location.X = FMath::RandRange(-SpawnRange, SpawnRange);
+	Location.Y = FMath::RandRange(-SpawnRange, SpawnRange);
+	Location.Z = FMath::RandRange(0, 100);
+
+	Transform.SetTranslation(Location);
+
+	ASlimeSpawner* SlimeSpawnerActor = GetWorld()->SpawnActor<ASlimeSpawner>(SlimeSpawnerClass, Transform);
+	SlimeSpawnerList.Push(SlimeSpawnerActor);
+}
+
+void AGamesFourGameModeBase::ClearSlimeSpawners()
+{
+	for (auto& SlimeSpawner : SlimeSpawnerList)
+	{
+		SlimeSpawner->ClearSlimes();
+		SlimeSpawner->Destroy();
 	}
 }

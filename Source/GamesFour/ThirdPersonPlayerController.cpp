@@ -1,13 +1,23 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "ThirdPersonPlayerController.h"
+#include "Blueprint/UserWidget.h"
 
 void AThirdPersonPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	//Get pawn reference
 	PlayerPawn = Cast<AThirdPersonCharacter>(GetPawn());
+
+	if (PlayerPawn)
+	{
+		//Add HUD and Minimap to screen
+		UUserWidget* HUDWidget = CreateWidget(this, UIClass);
+		if (HUDWidget != nullptr)
+		{
+			HUDWidget->AddToViewport();
+		}
+	}
 }
 
 void AThirdPersonPlayerController::SetupInputComponent()

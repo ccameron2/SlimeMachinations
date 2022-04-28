@@ -2,7 +2,7 @@
 
 
 #include "Sparks.h"
-#include "Kismet/GameplayStatics.h"
+#include "Kismet/Gameplaystatics.h"
 #include "EngineUtils.h"
 
 // Sets default values
@@ -13,13 +13,21 @@ ASparks::ASparks()
 
 	//Create particle system component and attach to root component
 	Sparks = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Sparks Particle Component"));
-	Sparks->SetupAttachment(RootComponent);
+	SetRootComponent(Sparks);
+
+	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Collision"));
+	SphereCollision->SetupAttachment(RootComponent);
+	SphereCollision->InitSphereRadius(16.0f);
 }
 
 // Called when the game starts or when spawned
 void ASparks::BeginPlay()
 {
 	Super::BeginPlay();
+	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &ASparks::OnOverlapBegin);
+
+	FTimerHandle LifeTimer;
+	GetWorld()->GetTimerManager().SetTimer(LifeTimer, this, &ASparks::TimeUp, Lifetime, false);
 }
 
 // Called every frame
@@ -53,5 +61,19 @@ void ASparks::Tick(float DeltaTime)
 		auto NewLocation = FMath::VInterpTo(GetActorLocation(), NearestSlime->GetActorLocation(), DeltaTime, 5.0f);
 		SetActorLocation(NewLocation);
 	}
+}
+
+void ASparks::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (Cast<ASlimeEnemy>(OtherActor))
+	{
+		UGameplayStatics::ApplyDamage(OtherActor, Damage, GetInstigatorController(), this, UDamageType::StaticClass());
+		Destroy();
+	}
+}
+
+void ASparks::TimeUp()
+{
+	Destroy();
 }
 

@@ -3,6 +3,7 @@
 #include "ResourcePickup.h"
 #include "SlimeEnemy.h"
 #include "Kismet/Gameplaystatics.h"
+#include "GamesFourGameModeBase.h"
 #include "GameFramework/PawnMovementComponent.h" 
 
 // Sets default values
@@ -25,9 +26,6 @@ AThirdPersonCharacter::AThirdPersonCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
-	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AThirdPersonCharacter::OnOverlapBegin);
-	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &AThirdPersonCharacter::OnOverlapEnd);
-
 	//Possess player 0
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
@@ -38,6 +36,10 @@ void AThirdPersonCharacter::BeginPlay()
 	Super::BeginPlay();
 	FTimerHandle ManaTimer;
 	GetWorld()->GetTimerManager().SetTimer(ManaTimer, this, &AThirdPersonCharacter::RegenerateMana, ManaRegenTime, true);
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AThirdPersonCharacter::OnOverlapBegin);
+	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &AThirdPersonCharacter::OnOverlapEnd);
+	FTimerHandle EnergyTimer;
+	GetWorld()->GetTimerManager().SetTimer(EnergyTimer, this, &AThirdPersonCharacter::RegenerateEnergy, EnergyRegenTime, true);
 }
 
 // Called every frame
@@ -46,7 +48,32 @@ void AThirdPersonCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if(Energy < MaxEnergy){ Energy++; }
 	if (ExpPoints >= MaxExp) { LevelUp(); }
-	
+	if (HealthPoints < 0)
+	{	
+		if (Lives > 0)
+		{
+			Lives--;
+			Gold = 0;
+			MaxHealth = 100;
+			MaxMana = 100;
+			MaxEnergy = 100;
+			MaxExp = 100;
+			HealthPoints = MaxHealth;
+			Mana = MaxMana;
+			Energy = MaxEnergy;
+			Level = 1;
+			ExpPoints = 0;
+			SkillPoints = 0;
+			AGamesFourGameModeBase* GameMode = Cast<AGamesFourGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+			GameMode->SlimeKills = 0;
+			GameMode->ClearSlimeSpawners();
+			SetActorLocation(FVector{ 0,300,0 });
+		}
+		else
+		{
+			Destroy();
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -139,6 +166,14 @@ void AThirdPersonCharacter::RegenerateMana()
 	if (Mana < MaxMana)
 	{
 		Mana += ManaRegenAmount;
+	}
+}
+
+void AThirdPersonCharacter::RegenerateEnergy()
+{
+	if (Energy < MaxEnergy)
+	{
+		Energy += EnergyRegenAmount;
 	}
 }
 

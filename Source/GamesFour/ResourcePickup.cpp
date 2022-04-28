@@ -26,20 +26,26 @@ void AResourcePickup::BeginPlay()
 void AResourcePickup::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 	FVector Location = GetActorLocation();
 	AActor* PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
-	FVector PlayerLocation = PlayerPawn->GetActorLocation() + FVector{0,0,300};
-	float DistanceToTravel = FVector::Distance(PlayerLocation, Location);
-	if (DistanceToTravel < MagnetRange)
+
+	if (PlayerPawn)
 	{
-		FVector UnitDirectionVector = UKismetMathLibrary::GetDirectionUnitVector(Location, PlayerLocation);
-		ResourceMesh->AddImpulse(UnitDirectionVector * ((MagnetIntensity * DistanceToTravel) / 40));
+		FVector PlayerLocation = PlayerPawn->GetActorLocation() + FVector{ 0,0,300 };
+		float DistanceToTravel = FVector::Distance(PlayerLocation, Location);
+		if (DistanceToTravel < MagnetRange)
+		{
+			FVector UnitDirectionVector = UKismetMathLibrary::GetDirectionUnitVector(Location, PlayerLocation);
+			ResourceMesh->AddImpulse(UnitDirectionVector * ((MagnetIntensity * DistanceToTravel) / 40));
+		}
+		if (!ResourceTimer.IsValid())
+		{
+			auto newLoc = FMath::VInterpTo(GetActorLocation(), GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation(), DeltaTime, 5.0f);
+			SetActorLocation(newLoc);
+		}
 	}
-	if (!ResourceTimer.IsValid())
-	{
-		auto newLoc = FMath::VInterpTo(GetActorLocation(), GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation(), DeltaTime, 5.0f);
-		SetActorLocation(newLoc);
-	}
+
 }
 
 void AResourcePickup::TimeUp()

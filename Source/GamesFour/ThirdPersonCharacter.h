@@ -57,7 +57,7 @@ public:
 		float MaxMana = 100.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float MaxGold = 100.0f;
+		float MaxGold = 999.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float UpgradeAmount = 20.0f;
@@ -96,15 +96,24 @@ public:
 		float ManaCost = 10.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float ManaRegenTime = 3.0f;
+		float ManaRegenTime = 2.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		float ManaRegenAmount = 20.0f;
+		float ManaRegenAmount = 10.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float EnergyRegenTime = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float EnergyRegenAmount = 2.0f;
 
 private:
 
 	UFUNCTION()
 		void RegenerateMana();
+
+	UFUNCTION()
+		void RegenerateEnergy();
 
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
@@ -123,5 +132,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<ASparks> MagicClass;
+
+
 
 };
