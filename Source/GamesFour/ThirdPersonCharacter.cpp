@@ -188,7 +188,7 @@ void AThirdPersonCharacter::BuyEnergyRegen()
 		GameMode->ShopGold += EnergyGoldCost;
 		Gold -= EnergyGoldCost;
 		EnergyRegenAmount++;
-		ManaGoldCost += 5;
+		EnergyGoldCost += 5;
 	}
 }
 
@@ -199,7 +199,7 @@ void AThirdPersonCharacter::BuyHealth()
 		GameMode->ShopGold += HealthGoldCost;
 		Gold -= HealthGoldCost;
 		HealthPoints = MaxHealth;
-		ManaGoldCost += 5;
+		HealthGoldCost += 5;
 	}
 }
 
