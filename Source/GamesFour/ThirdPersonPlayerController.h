@@ -24,6 +24,8 @@ public:
 
 	virtual void SetupInputComponent();
 
+	virtual void Tick(float DeltaTime) override;
+
 	UPROPERTY()
 		class AThirdPersonCharacter* PlayerPawn;
 
@@ -35,8 +37,20 @@ private:
 	virtual void CallStrafe(float Value);
 	virtual void CallJump();
 	virtual void CallLookUp(float Value);
+	virtual void OpenShop();
 	
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UUserWidget> UIClass;
 
+	UPROPERTY()
+		UUserWidget* HUDWidget;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> ShopClass;
+
+	UPROPERTY()
+		UUserWidget* ShopWidget;
+
+	UPROPERTY()
+		bool ShopShown = false;
 };

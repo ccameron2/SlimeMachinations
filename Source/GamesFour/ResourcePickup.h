@@ -50,6 +50,6 @@ private:
 		void TimeUp();
 
 	UPROPERTY(EditAnywhere)
-		float Lifetime = 8.0f;
+		float Lifetime = 2.0f;
 
 };

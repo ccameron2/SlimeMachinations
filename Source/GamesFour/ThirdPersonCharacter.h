@@ -6,6 +6,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Sparks.h"
+#include "GamesFourGameModeBase.h"
+#include "Components/ActorComponent.h" 
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
@@ -92,20 +94,50 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		int SkillPoints = 0;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere)
 		float ManaCost = 10.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere)
 		float ManaRegenTime = 2.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere)
 		float ManaRegenAmount = 10.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere)
 		float EnergyRegenTime = 1.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere)
 		float EnergyRegenAmount = 2.0f;
+
+	UPROPERTY(EditAnywhere)
+		float GoldDrainTime = 1.0f;
+
+	UFUNCTION(BlueprintCallable)
+		void BuyManaRegen();
+
+	UFUNCTION(BlueprintCallable)
+		void BuyEnergyRegen();
+
+	UFUNCTION(BlueprintCallable)
+		void BuyHealth();
+
+	UPROPERTY(EditAnywhere)
+		float Damage = 50.0f;
+
+	UFUNCTION(BlueprintCallable)
+		void BuyDamage();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int ManaGoldCost = 50;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int EnergyGoldCost = 25;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int HealthGoldCost = 50;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+		int DamageGoldCost = 400;
 
 private:
 
@@ -114,6 +146,9 @@ private:
 
 	UFUNCTION()
 		void RegenerateEnergy();
+
+	UFUNCTION()
+		void StaticDrainGold();
 
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
@@ -133,6 +168,10 @@ private:
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<ASparks> MagicClass;
 
+	UPROPERTY()
+		AGamesFourGameModeBase* GameMode;
 
+	UPROPERTY(EditAnywhere)
+		UActorComponent* SparkSpawnpoint;
 
 };

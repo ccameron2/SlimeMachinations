@@ -26,8 +26,9 @@ void ASlimeEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	FTimerHandle MovementTimer;
-	GetWorld()->GetTimerManager().SetTimer(MovementTimer, this, &ASlimeEnemy::MoveTimerUp, 0.2, true);
+	GetWorld()->GetTimerManager().SetTimer(MovementTimer, this, &ASlimeEnemy::MoveTimerUp, BounceDelay, true);
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &ASlimeEnemy::OnOverlapBegin);
+	SlimeMesh->SetMaterial(0, SlimeMats[FMath::RandRange(0,SlimeMats.Num()-1)]);
 }
 
 // Called every frame

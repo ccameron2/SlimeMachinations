@@ -77,3 +77,8 @@ void ASparks::TimeUp()
 	Destroy();
 }
 
+void ASparks::SetDamage(float damageAmount)
+{
+	Damage = damageAmount;
+}
+

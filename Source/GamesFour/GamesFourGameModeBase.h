@@ -33,7 +33,10 @@ private:
 		float SlimeSpawnerCooldown = 30.0f;
 
 	UPROPERTY(EditAnywhere)
-		int SpawnRange = 2500;
+		int SlimeLimit = 1000;
+
+	UPROPERTY(EditAnywhere)
+		int SpawnRange = 3000;
 
 	UFUNCTION()
 		void TimeUp();
@@ -43,6 +46,15 @@ public:
 	UFUNCTION()
 		void ClearSlimeSpawners();
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		int SlimeKills = 0;
+
+	UFUNCTION()
+		int GetSlimeKills();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int ShopGold = 0;
+
+	UFUNCTION()
+		int GetShopGold();
 };

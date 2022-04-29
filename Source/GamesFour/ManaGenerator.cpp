@@ -8,7 +8,7 @@ AManaGenerator::AManaGenerator()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
-	StaticMesh->SetupAttachment(RootComponent);
+	SetRootComponent(StaticMesh);
 
 	ActivationBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Activation Box"));
 	ActivationBox->SetupAttachment(RootComponent);

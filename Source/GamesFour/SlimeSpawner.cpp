@@ -3,6 +3,8 @@
 
 #include "SlimeSpawner.h"
 
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values
 ASlimeSpawner::ASlimeSpawner()
 {
@@ -28,7 +30,9 @@ void ASlimeSpawner::Tick(float DeltaTime)
 
 void ASlimeSpawner::ClearSlimes()
 {
-	for (auto& Slime : SlimeList)
+	TArray<AActor*> AllSlimesList;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), SlimeClass, AllSlimesList);
+	for (auto& Slime : AllSlimesList)
 	{
 		Slime->Destroy();
 	}
@@ -38,14 +42,18 @@ void ASlimeSpawner::TimeUp()
 {
 	FTransform Transform;
 	FVector Location;
-	Location.X = FMath::RandRange(0, 500);
-	Location.Y = FMath::RandRange(0, 500);
+	Location.X = FMath::RandRange(-SpawnRange, SpawnRange);
+	Location.Y = FMath::RandRange(-SpawnRange, SpawnRange);
 	Location.Z = FMath::RandRange(0, 200);
-	Transform.SetScale3D(SlimeScale);
+	float SlimeScaleOffset = FMath::RandRange(-0.5, 0.5);
+	Transform.SetScale3D(SlimeScale + FVector(SlimeScaleOffset,SlimeScaleOffset,SlimeScaleOffset));
 	Transform.SetTranslation(Location);
-	ASlimeEnemy* SlimeEnemy = GetWorld()->SpawnActorDeferred<ASlimeEnemy>(SlimeClass, Transform);
-    //SlimeEnemy->Type = FMath::RandRange(0, SlimeEnemy->MaterialList.Num() - 1);
-    SlimeEnemy->FinishSpawning(Transform);
-	SlimeList.Push(SlimeEnemy);
+	TArray<AActor*> AllSlimesList;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), SlimeClass, AllSlimesList);
+	if (AllSlimesList.Num() < SlimeLimit)
+	{
+		ASlimeEnemy* SlimeEnemy = GetWorld()->SpawnActor<ASlimeEnemy>(SlimeClass, Transform);
+	}
+
 }
 

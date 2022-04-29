@@ -28,19 +28,22 @@ public:
 	UFUNCTION()
 		void ClearSlimes();
 
+	UPROPERTY(EditAnywhere)
+		int SlimeLimit = 4000;
+
 private:
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<ASlimeEnemy> SlimeClass;
 
-	UPROPERTY(VisibleAnywhere)
-		TArray<ASlimeEnemy*> SlimeList;
-
 	UPROPERTY(EditAnywhere)
-		float SpawnDelay = 10.0f;
+		float SpawnDelay = 5.0f;
 
 	UPROPERTY(EditAnywhere)
 		FVector SlimeScale = FVector(1.0f,1.0f,1.0f);
+
+	UPROPERTY(EditAnywhere)
+		float SpawnRange = 500;
 
 	UFUNCTION()
 		void TimeUp();

@@ -12,11 +12,12 @@ void AThirdPersonPlayerController::BeginPlay()
 	if (PlayerPawn)
 	{
 		//Add HUD and Minimap to screen
-		UUserWidget* HUDWidget = CreateWidget(this, UIClass);
+		HUDWidget = CreateWidget(this, UIClass);
 		if (HUDWidget != nullptr)
 		{
 			HUDWidget->AddToViewport();
 		}
+		ShopWidget = CreateWidget(this, ShopClass);
 	}
 }
 
@@ -33,8 +34,16 @@ void AThirdPersonPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("Strafe", this, &AThirdPersonPlayerController::CallStrafe);
 	InputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AThirdPersonPlayerController::CallJump);
 	InputComponent->BindAxis("Look Up", this, &AThirdPersonPlayerController::CallLookUp);
-	//InputComponent->BindAction("Sprint", EInputEvent::IE_Pressed, this, &AThirdPersonPlayerController::CallSprint);
+	InputComponent->BindAction("Open Shop", EInputEvent::IE_Pressed, this, &AThirdPersonPlayerController::OpenShop);
 
+}
+
+void AThirdPersonPlayerController::Tick(float DeltaTime)
+{
+	if (!PlayerPawn)
+	{
+		HUDWidget->RemoveFromViewport();
+	}
 }
 
 void AThirdPersonPlayerController::CallForward(float Value)
@@ -56,16 +65,10 @@ void AThirdPersonPlayerController::CallTurn(float Value)
 
 void AThirdPersonPlayerController::CallFire()
 {
-	//if (TimesShot < MaximumAmmo)
-	//{
-		if (PlayerPawn)
-		{
-			//TimesShot++;
-			//ShotsLeft = MaximumAmmo - TimesShot;
-			PlayerPawn->Fire();
-		}
-	//}
-
+	if (PlayerPawn)
+	{
+		PlayerPawn->Fire();
+	}
 }
 
 void AThirdPersonPlayerController::CallStrafe(float Value)
@@ -89,5 +92,19 @@ void AThirdPersonPlayerController::CallLookUp(float Value)
 	if (PlayerPawn)
 	{
 		PlayerPawn->LookUp(Value);
+	}
+}
+
+void AThirdPersonPlayerController::OpenShop()
+{
+	if (!ShopShown)
+	{
+		ShopWidget->AddToViewport();
+		ShopShown = true;
+	}
+	else
+	{
+		ShopWidget->RemoveFromViewport();
+		ShopShown = false;
 	}
 }

@@ -37,7 +37,7 @@ public:
 		float JumpStrength = 150;
 
 	UPROPERTY(EditAnywhere)
-		float GroundLevel = 16;
+		float GroundLevel = 36;
 
 	UPROPERTY(EditAnywhere)
 		float MaxSpeed = 150;
@@ -63,6 +63,9 @@ public:
 	UFUNCTION()
 		void MoveTimerUp();
 
+	UPROPERTY(EditAnywhere)
+		float BounceDelay = 0.5f;
+
 	APawn* PlayerPawn;
 
 	UFUNCTION()
@@ -76,5 +79,6 @@ private:
 		UStaticMeshComponent* SlimeMesh;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AResourcePickup> ResourcePickupClass;
-
+	UPROPERTY(EditAnywhere)
+		TArray<UMaterialInterface*> SlimeMats;
 };

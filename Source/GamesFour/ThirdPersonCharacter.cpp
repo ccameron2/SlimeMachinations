@@ -3,7 +3,6 @@
 #include "ResourcePickup.h"
 #include "SlimeEnemy.h"
 #include "Kismet/Gameplaystatics.h"
-#include "GamesFourGameModeBase.h"
 #include "GameFramework/PawnMovementComponent.h" 
 
 // Sets default values
@@ -26,6 +25,10 @@ AThirdPersonCharacter::AThirdPersonCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
+	SparkSpawnpoint = CreateDefaultSubobject<UActorComponent>(TEXT("Spark Spawn Point"));
+
+	GameMode = Cast<AGamesFourGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+
 	//Possess player 0
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
@@ -34,12 +37,18 @@ AThirdPersonCharacter::AThirdPersonCharacter()
 void AThirdPersonCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	FTimerHandle ManaTimer;
-	GetWorld()->GetTimerManager().SetTimer(ManaTimer, this, &AThirdPersonCharacter::RegenerateMana, ManaRegenTime, true);
+
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AThirdPersonCharacter::OnOverlapBegin);
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &AThirdPersonCharacter::OnOverlapEnd);
+
+	FTimerHandle ManaTimer;
+	GetWorld()->GetTimerManager().SetTimer(ManaTimer, this, &AThirdPersonCharacter::RegenerateMana, ManaRegenTime, true);
+
 	FTimerHandle EnergyTimer;
 	GetWorld()->GetTimerManager().SetTimer(EnergyTimer, this, &AThirdPersonCharacter::RegenerateEnergy, EnergyRegenTime, true);
+
+	FTimerHandle GoldTimer;
+	GetWorld()->GetTimerManager().SetTimer(GoldTimer, this, &AThirdPersonCharacter::StaticDrainGold, GoldDrainTime, true);
 }
 
 // Called every frame
@@ -64,8 +73,6 @@ void AThirdPersonCharacter::Tick(float DeltaTime)
 			Level = 1;
 			ExpPoints = 0;
 			SkillPoints = 0;
-			AGamesFourGameModeBase* GameMode = Cast<AGamesFourGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
-			GameMode->SlimeKills = 0;
 			GameMode->ClearSlimeSpawners();
 			SetActorLocation(FVector{ 0,300,0 });
 		}
@@ -130,6 +137,7 @@ void AThirdPersonCharacter::Fire()
 		FTransform Transform;
 		Transform.SetLocation(Location);
 		ASparks* SparkActor = GetWorld()->SpawnActor<ASparks>(MagicClass, Transform);
+		SparkActor->SetDamage(Damage);
 		Mana -= ManaCost;
 	}
 }
@@ -161,6 +169,50 @@ void AThirdPersonCharacter::LevelUp()
 	MaxExp += 10;
 }
 
+void AThirdPersonCharacter::BuyManaRegen()
+{
+	if (Gold >= ManaGoldCost)
+	{
+		GameMode->ShopGold += ManaGoldCost;
+		Gold -= ManaGoldCost;
+		ManaRegenAmount++;
+		ManaGoldCost += 5;
+	}
+}
+
+void AThirdPersonCharacter::BuyEnergyRegen()
+{
+	if (Gold >= EnergyGoldCost)
+	{
+		GameMode->ShopGold += EnergyGoldCost;
+		Gold -= EnergyGoldCost;
+		EnergyRegenAmount++;
+		ManaGoldCost += 5;
+	}
+}
+
+void AThirdPersonCharacter::BuyHealth()
+{
+	if (Gold >= HealthGoldCost)
+	{
+		GameMode->ShopGold += HealthGoldCost;
+		Gold -= HealthGoldCost;
+		HealthPoints = MaxHealth;
+		ManaGoldCost += 5;
+	}
+}
+
+void AThirdPersonCharacter::BuyDamage()
+{
+	if (Gold >= DamageGoldCost)
+	{
+		GameMode->ShopGold += 400;
+		Gold -= 400;
+		Damage += 50;
+		DamageGoldCost += 100;
+	}
+}
+
 void AThirdPersonCharacter::RegenerateMana()
 {
 	if (Mana < MaxMana)
@@ -177,9 +229,18 @@ void AThirdPersonCharacter::RegenerateEnergy()
 	}
 }
 
+void AThirdPersonCharacter::StaticDrainGold()
+{
+	if (Gold > 0)
+	{
+		Gold--;
+	}	
+}
+
 float AThirdPersonCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Take Damage"));
+	GameMode->SlimeKills = 0;
 	HealthPoints -= DamageAmount;
 	return 0.0f;
 }
