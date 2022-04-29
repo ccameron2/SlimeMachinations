@@ -2,6 +2,7 @@
 
 #include "ThirdPersonPlayerController.h"
 #include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
 
 void AThirdPersonPlayerController::BeginPlay()
 {
@@ -13,11 +14,17 @@ void AThirdPersonPlayerController::BeginPlay()
 	{
 		//Add HUD and Minimap to screen
 		HUDWidget = CreateWidget(this, UIClass);
-		if (HUDWidget != nullptr)
+		if (HUDWidget)
 		{
 			HUDWidget->AddToViewport();
 		}
+
 		ShopWidget = CreateWidget(this, ShopClass);
+		if (ShopWidget)
+		{
+			ShopWidget->AddToViewport();
+			ShopWidget->SetVisibility(ESlateVisibility::Hidden);
+		}
 	}
 }
 
@@ -97,14 +104,20 @@ void AThirdPersonPlayerController::CallLookUp(float Value)
 
 void AThirdPersonPlayerController::OpenShop()
 {
+	
 	if (!ShopShown)
 	{
-		ShopWidget->AddToViewport();
+		ShopWidget->SetVisibility(ESlateVisibility::Visible);
 		ShopShown = true;
+		UGameplayStatics::SetGamePaused(ShopWidget, ShopShown);
+		bEnableClickEvents = true;
+		bShowMouseCursor = true;
 	}
 	else
 	{
-		ShopWidget->RemoveFromViewport();
+		ShopWidget->SetVisibility(ESlateVisibility::Hidden);
 		ShopShown = false;
+		bEnableClickEvents = false;
+		bShowMouseCursor = false;
 	}
 }

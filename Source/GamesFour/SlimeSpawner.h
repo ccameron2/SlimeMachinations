@@ -29,7 +29,7 @@ public:
 		void ClearSlimes();
 
 	UPROPERTY(EditAnywhere)
-		int SlimeLimit = 4000;
+		int SlimeLimit = 2000;
 
 private:
 

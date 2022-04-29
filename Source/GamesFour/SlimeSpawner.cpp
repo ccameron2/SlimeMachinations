@@ -53,6 +53,10 @@ void ASlimeSpawner::TimeUp()
 	if (AllSlimesList.Num() < SlimeLimit)
 	{
 		ASlimeEnemy* SlimeEnemy = GetWorld()->SpawnActor<ASlimeEnemy>(SlimeClass, Transform);
+		if (SlimeEnemy)
+		{
+			SlimeEnemy->MovementSpeed += AllSlimesList.Num() / 10;
+		}
 	}
 
 }

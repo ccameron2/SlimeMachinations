@@ -44,7 +44,7 @@ void ASlimeEnemy::Tick(float DeltaTime)
 			FVector Location = GetActorLocation();
 			FTransform Transform;
 			Transform.SetScale3D(FVector{ 0.08,0.08,0.08 });
-			Transform.SetLocation(Location + FVector{ float(FMath::RandRange(0,DropSpread)),float(FMath::RandRange(0,DropSpread)),float(FMath::RandRange(0,DropSpread)) });
+			Transform.SetLocation(Location + FVector{ float(FMath::RandRange(-DropSpread,DropSpread)),float(FMath::RandRange(-DropSpread,DropSpread)),float(FMath::RandRange(-DropSpread,DropSpread)) });
 			AResourcePickup* ResourcePickup = GetWorld()->SpawnActorDeferred<AResourcePickup>(ResourcePickupClass, Transform);
 			ResourcePickup->Type = FMath::RandRange(0, ResourcePickup->MaterialList.Num() - 1);
 			ResourcePickup->FinishSpawning(Transform);

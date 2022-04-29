@@ -25,7 +25,9 @@ AThirdPersonCharacter::AThirdPersonCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
-	SparkSpawnpoint = CreateDefaultSubobject<UActorComponent>(TEXT("Spark Spawn Point"));
+	SparkSpawnpoint = CreateDefaultSubobject<USceneComponent>(TEXT("Spark Spawn Point"));
+	SparkSpawnpoint->SetupAttachment(RootComponent);
+	SparkSpawnpoint->SetRelativeLocation(FVector{ 30.0f,0.0f,50.0f });
 
 	GameMode = Cast<AGamesFourGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 
@@ -39,7 +41,6 @@ void AThirdPersonCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AThirdPersonCharacter::OnOverlapBegin);
-	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &AThirdPersonCharacter::OnOverlapEnd);
 
 	FTimerHandle ManaTimer;
 	GetWorld()->GetTimerManager().SetTimer(ManaTimer, this, &AThirdPersonCharacter::RegenerateMana, ManaRegenTime, true);
@@ -133,7 +134,7 @@ void AThirdPersonCharacter::Fire()
 {
 	if (Mana >= ManaCost)
 	{
-		FVector Location = GetActorLocation();
+		FVector Location = SparkSpawnpoint->GetComponentLocation();
 		FTransform Transform;
 		Transform.SetLocation(Location);
 		ASparks* SparkActor = GetWorld()->SpawnActor<ASparks>(MagicClass, Transform);
@@ -202,6 +203,16 @@ void AThirdPersonCharacter::BuyHealth()
 	}
 }
 
+void AThirdPersonCharacter::BuyALife()
+{
+	if (Gold >= LifeGoldCost)
+	{
+		GameMode->ShopGold += LifeGoldCost;
+		Gold -= LifeGoldCost;
+		Lives++;
+	}
+}
+
 void AThirdPersonCharacter::BuyDamage()
 {
 	if (Gold >= DamageGoldCost)
@@ -265,13 +276,5 @@ void AThirdPersonCharacter::OnOverlapBegin(class UPrimitiveComponent* Overlapped
 			ASlimeEnemy* slimeEnemy = Cast<ASlimeEnemy>(OtherActor);
 			if (slimeEnemy) { UGameplayStatics::ApplyDamage(OtherActor, 10.0f, GetInstigatorController(), this, UDamageType::StaticClass()); }
 		}
-	}
-}
-
-void AThirdPersonCharacter::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	if (OtherActor && (OtherActor != this) && OtherComp)
-	{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap End"));
 	}
 }

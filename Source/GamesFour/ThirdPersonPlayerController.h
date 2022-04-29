@@ -29,6 +29,9 @@ public:
 	UPROPERTY()
 		class AThirdPersonCharacter* PlayerPawn;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool ShopShown = false;
+
 private:
 
 	virtual void CallForward(float Value);
@@ -51,6 +54,5 @@ private:
 	UPROPERTY()
 		UUserWidget* ShopWidget;
 
-	UPROPERTY()
-		bool ShopShown = false;
+
 };

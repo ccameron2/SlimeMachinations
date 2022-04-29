@@ -49,10 +49,14 @@ void AManaGenerator::ManaLoop()
 	{
 		if (PlayerPawn->Energy > EnergyCost)
 		{
-			PlayerPawn->Energy -= EnergyCost;
 			if (PlayerPawn->Mana  < PlayerPawn->MaxMana)
 			{
-				PlayerPawn->Mana++;
+				if (PlayerPawn->Gold > 0)
+				{
+					PlayerPawn->Energy -= EnergyCost;
+					PlayerPawn->Gold--;
+					PlayerPawn->Mana++;
+				}
 			}
 		}
 	}

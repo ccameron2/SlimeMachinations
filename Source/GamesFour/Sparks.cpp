@@ -17,7 +17,7 @@ ASparks::ASparks()
 
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere Collision"));
 	SphereCollision->SetupAttachment(RootComponent);
-	SphereCollision->InitSphereRadius(16.0f);
+	SphereCollision->InitSphereRadius(12.0f);
 }
 
 // Called when the game starts or when spawned

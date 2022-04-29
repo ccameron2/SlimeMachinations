@@ -7,7 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Sparks.h"
 #include "GamesFourGameModeBase.h"
-#include "Components/ActorComponent.h" 
+#include "Components/SceneComponent.h" 
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
@@ -95,7 +95,7 @@ public:
 		int SkillPoints = 0;
 
 	UPROPERTY(EditAnywhere)
-		float ManaCost = 10.0f;
+		float ManaCost = 5.0f;
 
 	UPROPERTY(EditAnywhere)
 		float ManaRegenTime = 2.0f;
@@ -110,7 +110,7 @@ public:
 		float EnergyRegenAmount = 2.0f;
 
 	UPROPERTY(EditAnywhere)
-		float GoldDrainTime = 1.0f;
+		float GoldDrainTime = 3.0f;
 
 	UFUNCTION(BlueprintCallable)
 		void BuyManaRegen();
@@ -120,6 +120,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void BuyHealth();
+
+	UFUNCTION(BlueprintCallable)
+		void BuyALife();
+
+	UPROPERTY(EditAnywhere)
+		float LifeGoldCost = 1000.0f;
 
 	UPROPERTY(EditAnywhere)
 		float Damage = 50.0f;
@@ -156,9 +162,6 @@ private:
 	UFUNCTION()
 		void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	UFUNCTION()
-		void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
 	UPROPERTY(EditAnywhere)
 		UCameraComponent* Camera;
 
@@ -172,6 +175,6 @@ private:
 		AGamesFourGameModeBase* GameMode;
 
 	UPROPERTY(EditAnywhere)
-		UActorComponent* SparkSpawnpoint;
+		USceneComponent* SparkSpawnpoint;
 
 };

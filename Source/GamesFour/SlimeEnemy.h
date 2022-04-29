@@ -31,7 +31,7 @@ public:
 	void AddImpulse(FVector Direction);
 
 	UPROPERTY(EditAnywhere)
-		float MovementSpeed = 100;
+		float MovementSpeed = 80;
 
 	UPROPERTY(EditAnywhere)
 		float JumpStrength = 150;
@@ -40,7 +40,7 @@ public:
 		float GroundLevel = 36;
 
 	UPROPERTY(EditAnywhere)
-		float MaxSpeed = 150;
+		float MaxSpeed = 300;
 
 	UPROPERTY(EditAnywhere)
 		float HealthPoints = 100;
