@@ -39,6 +39,9 @@ public:
 	void LookUp(float AxisValue);
 	void Fire();
 	void Jump();
+	void ToggleSprint();
+
+	bool Sprinting = false;
 
 	UPROPERTY(EditAnywhere)
 		float MoveSpeed = 200.0f;
@@ -95,7 +98,7 @@ public:
 		int SkillPoints = 0;
 
 	UPROPERTY(EditAnywhere)
-		float ManaCost = 5.0f;
+		float ManaCost = 10.0f;
 
 	UPROPERTY(EditAnywhere)
 		float ManaRegenTime = 2.0f;

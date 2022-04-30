@@ -44,14 +44,21 @@ void ASlimeSpawner::TimeUp()
 	FVector Location;
 	Location.X = FMath::RandRange(-SpawnRange, SpawnRange);
 	Location.Y = FMath::RandRange(-SpawnRange, SpawnRange);
-	Location.Z = FMath::RandRange(0, 200);
-	float SlimeScaleOffset = FMath::RandRange(-0.5, 0.5);
+	Location.Z = FMath::RandRange(100, 200);
+	float SlimeScaleOffset = FMath::RandRange(-0.2, 0.8);
 	Transform.SetScale3D(SlimeScale + FVector(SlimeScaleOffset,SlimeScaleOffset,SlimeScaleOffset));
 	Transform.SetTranslation(Location);
 	TArray<AActor*> AllSlimesList;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), SlimeClass, AllSlimesList);
 	if (AllSlimesList.Num() < SlimeLimit)
 	{
+		auto rand = FMath::RandRange(0, 500);
+		if (rand >= 499)
+		{
+			Transform.SetLocation(Location + FVector{ 0,0,300 });
+			ASlimeEnemy* BossSlimeEnemy = GetWorld()->SpawnActor<ASlimeEnemy>(BossSlimeClass, Transform);
+			BossSlimeEnemy->MovementSpeed += AllSlimesList.Num() / 10;
+		}
 		ASlimeEnemy* SlimeEnemy = GetWorld()->SpawnActor<ASlimeEnemy>(SlimeClass, Transform);
 		if (SlimeEnemy)
 		{

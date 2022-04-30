@@ -10,7 +10,7 @@ AResourcePickup::AResourcePickup()
 	PrimaryActorTick.bCanEverTick = true;
 
 	ResourceMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Health Mesh"));
-	ResourceMesh->SetupAttachment(RootComponent);
+	SetRootComponent(ResourceMesh);
 
 }
 

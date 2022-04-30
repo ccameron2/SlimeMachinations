@@ -37,13 +37,13 @@ public:
 		float JumpStrength = 150;
 
 	UPROPERTY(EditAnywhere)
-		float GroundLevel = 36;
+		float GroundLevel = 40;
 
 	UPROPERTY(EditAnywhere)
 		float MaxSpeed = 300;
 
 	UPROPERTY(EditAnywhere)
-		float HealthPoints = 100;
+		float HealthPoints = FMath::RandRange(50,150);
 
 	UPROPERTY(EditAnywhere)
 		int DropAmount = 25;

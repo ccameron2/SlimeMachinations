@@ -4,6 +4,7 @@
 
 #include "Components/BoxComponent.h" 
 #include "ThirdPersonCharacter.h"
+#include "Components/TextRenderComponent.h" 
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
@@ -50,4 +51,8 @@ private:
 
 	UPROPERTY()
 		AThirdPersonCharacter* PlayerPawn;
+
+	UPROPERTY(EditAnywhere)
+		UTextRenderComponent* TextRender;
+
 };

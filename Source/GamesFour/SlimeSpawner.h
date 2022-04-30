@@ -37,6 +37,12 @@ private:
 		TSubclassOf<ASlimeEnemy> SlimeClass;
 
 	UPROPERTY(EditAnywhere)
+		TSubclassOf<ASlimeEnemy> BossSlimeClass;
+
+	UPROPERTY(EditAnywhere)
+		USphereComponent* SphereCollision;
+
+	UPROPERTY(EditAnywhere)
 		float SpawnDelay = 5.0f;
 
 	UPROPERTY(EditAnywhere)

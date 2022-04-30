@@ -3,6 +3,7 @@
 #include "ResourcePickup.h"
 #include "SlimeEnemy.h"
 #include "Kismet/Gameplaystatics.h"
+#include "GameFramework/CharacterMovementComponent.h" 
 #include "GameFramework/PawnMovementComponent.h" 
 
 // Sets default values
@@ -94,15 +95,30 @@ void AThirdPersonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 void AThirdPersonCharacter::MoveForward(float AxisValue)
 {
 	//Move character forwards
+
+	if (Sprinting)
+	{
+		if (Energy > 0)
+		{
+			GetCharacterMovement()->MaxWalkSpeed = 1000;
+			Energy -= 2;
+		}
+		else
+		{
+			GetCharacterMovement()->MaxWalkSpeed = 600;
+		}
+	}
+	else
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 600;
+	}
 	if (Controller != nullptr && AxisValue != 0)
 	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-
 		AddMovementInput(Direction, AxisValue);
 	}
-	//AddMovementInput(GetActorForwardVector() * AxisValue);
 }
 
 void AThirdPersonCharacter::Strafe(float AxisValue)
@@ -145,13 +161,18 @@ void AThirdPersonCharacter::Fire()
 
 void AThirdPersonCharacter::Jump()
 {
-	Super::Jump();
 	auto MovementComponent = GetMovementComponent();
 
-	if (Energy > 50 && !MovementComponent->IsFalling())
+	if (Energy > 75 && !MovementComponent->IsFalling())
 	{
+		Super::Jump();
 		Energy -= 75;
 	}	
+}
+
+void AThirdPersonCharacter::ToggleSprint()
+{
+	Sprinting = !Sprinting;
 }
 
 
@@ -250,7 +271,6 @@ void AThirdPersonCharacter::StaticDrainGold()
 
 float AThirdPersonCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Take Damage"));
 	GameMode->SlimeKills = 0;
 	HealthPoints -= DamageAmount;
 	return 0.0f;

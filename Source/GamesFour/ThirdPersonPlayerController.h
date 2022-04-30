@@ -32,6 +32,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool ShopShown = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool CursorManualUnlock = false;
+
 private:
 
 	virtual void CallForward(float Value);
@@ -41,7 +44,11 @@ private:
 	virtual void CallJump();
 	virtual void CallLookUp(float Value);
 	virtual void OpenShop();
+	virtual void UnlockCursor();
+	virtual void CallToggleSprint();
 	
+
+
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UUserWidget> UIClass;
 

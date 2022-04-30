@@ -42,6 +42,8 @@ void AThirdPersonPlayerController::SetupInputComponent()
 	InputComponent->BindAction("Jump", EInputEvent::IE_Pressed, this, &AThirdPersonPlayerController::CallJump);
 	InputComponent->BindAxis("Look Up", this, &AThirdPersonPlayerController::CallLookUp);
 	InputComponent->BindAction("Open Shop", EInputEvent::IE_Pressed, this, &AThirdPersonPlayerController::OpenShop);
+	InputComponent->BindAction("Unlock Cursor", EInputEvent::IE_Pressed, this, &AThirdPersonPlayerController::UnlockCursor);
+	InputComponent->BindAction("Sprint", EInputEvent::IE_Pressed, this, &AThirdPersonPlayerController::CallToggleSprint);
 
 }
 
@@ -119,5 +121,24 @@ void AThirdPersonPlayerController::OpenShop()
 		ShopShown = false;
 		bEnableClickEvents = false;
 		bShowMouseCursor = false;
+	}
+}
+
+void AThirdPersonPlayerController::UnlockCursor()
+{
+	if (!CursorManualUnlock)
+	{
+		CursorManualUnlock = true;
+		bEnableClickEvents = true;
+		bShowMouseCursor   = true;
+		UGameplayStatics::SetGamePaused(HUDWidget, true);
+	}
+}
+
+void AThirdPersonPlayerController::CallToggleSprint()
+{
+	if (PlayerPawn)
+	{
+		PlayerPawn->ToggleSprint();
 	}
 }

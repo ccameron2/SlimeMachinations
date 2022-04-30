@@ -95,7 +95,6 @@ void ASlimeEnemy::MoveTimerUp()
 
 float ASlimeEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("SlimeDamage"));
 	HealthPoints -= DamageAmount;
 	return 0.0f;
 }
