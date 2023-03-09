@@ -26,30 +26,38 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	UPROPERTY(EditAnywhere)
-		UParticleSystemComponent* Sparks;
-
-	UPROPERTY(EditAnywhere)
-		TSubclassOf<ASlimeEnemy> SlimeClass;
-
-	UPROPERTY(EditAnywhere)
-		USphereComponent* SphereCollision;
-
-	UPROPERTY(EditAnywhere)
-		float Damage = 50.0f;
-
-	UPROPERTY(EditAnywhere)
-		float Lifetime = 0.5f;
-
-	UFUNCTION()
-		void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,UPrimitiveComponent* OtherComp,int32 OtherBodyIndex,bool bFromSweep,const FHitResult& SweepResult);
-
-	UFUNCTION()
-		void TimeUp();
-
+	// Set damage of projectile
 	UFUNCTION()
 		void SetDamage(float damageAmount);
 
+private:
 
+	// Particles for projectile
+	UPROPERTY(EditAnywhere)
+		UParticleSystemComponent* Sparks;
+
+	// Slime class to target
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<ASlimeEnemy> SlimeClass;
+
+	// Collision component to apply damage to slimes
+	UPROPERTY(EditAnywhere)
+		USphereComponent* SphereCollision;
+
+	// Damage of projectile
+	UPROPERTY(EditAnywhere)
+		float Damage = 50.0f;
+
+	// Lifetime of projectile
+	UPROPERTY(EditAnywhere)
+		float Lifetime = 1.0f;
+
+	// Dynamic delegate for collision
+	UFUNCTION()
+		void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,UPrimitiveComponent* OtherComp,int32 OtherBodyIndex,bool bFromSweep,const FHitResult& SweepResult);
+
+	// Function to call when timer has elapsed
+	UFUNCTION()
+		void TimeUp();
 
 };

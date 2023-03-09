@@ -30,8 +30,11 @@ void ASlimeSpawner::Tick(float DeltaTime)
 
 void ASlimeSpawner::ClearSlimes()
 {
+	// Get a list of all slimes
 	TArray<AActor*> AllSlimesList;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), SlimeClass, AllSlimesList);
+	
+	// Destroy each slime
 	for (auto& Slime : AllSlimesList)
 	{
 		Slime->Destroy();
@@ -40,28 +43,39 @@ void ASlimeSpawner::ClearSlimes()
 
 void ASlimeSpawner::TimeUp()
 {
+	// Get random location for slime
 	FTransform Transform;
 	FVector Location;
 	Location.X = FMath::RandRange(-SpawnRange, SpawnRange);
 	Location.Y = FMath::RandRange(-SpawnRange, SpawnRange);
 	Location.Z = FMath::RandRange(100, 200);
-	float SlimeScaleOffset = FMath::RandRange(-0.2, 0.8);
-	Transform.SetScale3D(SlimeScale + FVector(SlimeScaleOffset,SlimeScaleOffset,SlimeScaleOffset));
 	Transform.SetTranslation(Location);
+
+	// Get random scale for slime
+	float SlimeScaleOffset = FMath::RandRange(0.2, 0.8);
+	Transform.SetScale3D(SlimeScale + FVector(SlimeScaleOffset,SlimeScaleOffset,SlimeScaleOffset));
+
+	// Get a list of all slimes
 	TArray<AActor*> AllSlimesList;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), SlimeClass, AllSlimesList);
+
+	// If slimes are not too plentiful
 	if (AllSlimesList.Num() < SlimeLimit)
 	{
-		auto rand = FMath::RandRange(0, 500);
-		if (rand >= 499)
+		// Generate number to decide which slime to spawn
+		auto rand = FMath::RandRange(0, 200);
+		if (rand >= 199)
 		{
+			// Spawn boss slime
 			Transform.SetLocation(Location + FVector{ 0,0,300 });
 			ASlimeEnemy* BossSlimeEnemy = GetWorld()->SpawnActor<ASlimeEnemy>(BossSlimeClass, Transform);
 			BossSlimeEnemy->MovementSpeed += AllSlimesList.Num() / 10;
 		}
+		// Spawn normal slime
 		ASlimeEnemy* SlimeEnemy = GetWorld()->SpawnActor<ASlimeEnemy>(SlimeClass, Transform);
 		if (SlimeEnemy)
 		{
+			// Increase movement speed for each slime
 			SlimeEnemy->MovementSpeed += AllSlimesList.Num() / 10;
 		}
 	}

@@ -33,6 +33,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// Control functions
 	void MoveForward(float AxisValue);
 	void Strafe(float AxisValue);
 	void Turn(float AxisValue);
@@ -41,143 +42,191 @@ public:
 	void Jump();
 	void ToggleSprint();
 
+	// Sprint toggle 
 	bool Sprinting = false;
 
-	UPROPERTY(EditAnywhere)
+	// Movement speed of the player
+	UPROPERTY(EditAnywhere, Category = "Stats")
 		float MoveSpeed = 200.0f;
 
-	UPROPERTY(EditAnywhere)
+	// Rotation speed of the player
+	UPROPERTY(EditAnywhere, Category = "Stats")
 		float RotationSpeed = 500.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// Max health points that can be held
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 		float MaxHealth = 100.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// Max energy points that can be held
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 		float MaxEnergy = 100.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// Max experience before a level up
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 		float MaxExp = 100.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	
+	// Max mana that can be held
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 		float MaxMana = 100.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// Max gold that can be held
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 		float MaxGold = 999.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// Amount to upgrade a stat with a skill point
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 		float UpgradeAmount = 20.0f;
 
+	// Level up the player
 	UFUNCTION(BlueprintCallable)
 		void LevelUp();
 
+	// Returns true if the player has available skill points
 	UFUNCTION(BlueprintCallable)
 		bool HasSkillPoints();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	// Current health of the player 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resources")
 		float HealthPoints = MaxHealth;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	// Current experience points collected
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resources")
 		float ExpPoints = 0.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	// Current energy of the player
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resources")
 		float Energy = MaxEnergy;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	// Current amount of gold collected
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resources")
 		float Gold = 0.0f;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	// Current mana of the player
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resources")
 		float Mana = MaxMana;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		int Level = 1;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	// Current extra lives available
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resources")
 		int Lives = 1;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	// Current skill points available
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Resources")
 		int SkillPoints = 0;
 
-	UPROPERTY(EditAnywhere)
-		float ManaCost = 10.0f;
-
-	UPROPERTY(EditAnywhere)
-		float ManaRegenTime = 2.0f;
-
-	UPROPERTY(EditAnywhere)
-		float ManaRegenAmount = 10.0f;
-
-	UPROPERTY(EditAnywhere)
-		float EnergyRegenTime = 1.0f;
-
-	UPROPERTY(EditAnywhere)
-		float EnergyRegenAmount = 2.0f;
-
-	UPROPERTY(EditAnywhere)
+	// Time to wait after every gold drain
+	UPROPERTY(EditAnywhere, Category = "Resources")
 		float GoldDrainTime = 3.0f;
 
+	// Current player level
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Stats")
+		int Level = 1;
+
+	// Mana cost to fire projectile
+	UPROPERTY(EditAnywhere, Category = "Stats")
+		float ManaCost = 10.0f;
+
+	// Time to wait before regenerating mana
+	UPROPERTY(EditAnywhere, Category = "Stats")
+		float ManaRegenTime = 2.0f;
+
+	// Amount of mana to regenerate
+	UPROPERTY(EditAnywhere, Category = "Stats")
+		float ManaRegenAmount = 10.0f;
+
+	// Time to wait before regenerating energy
+	UPROPERTY(EditAnywhere, Category = "Stats")
+		float EnergyRegenTime = 1.0f;
+
+	// Amount of energy to regenerate
+	UPROPERTY(EditAnywhere, Category = "Stats")
+		float EnergyRegenAmount = 2.0f;
+
+	// Current damage of the player
+	UPROPERTY(EditAnywhere, Category = "Stats")
+		float Damage = 50.0f;
+
+	// Increase mana regen for gold
 	UFUNCTION(BlueprintCallable)
 		void BuyManaRegen();
 
+	// Increase energy regen for gold
 	UFUNCTION(BlueprintCallable)
 		void BuyEnergyRegen();
 
+	// Restore health for gold
 	UFUNCTION(BlueprintCallable)
 		void BuyHealth();
 
+	// Buy an extra life
 	UFUNCTION(BlueprintCallable)
 		void BuyALife();
 
-	UPROPERTY(EditAnywhere)
+	// Cost to buy a life
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "Shop")
 		float LifeGoldCost = 1000.0f;
 
-	UPROPERTY(EditAnywhere)
-		float Damage = 50.0f;
-
+	// Buy more damage for the player's projectiles
 	UFUNCTION(BlueprintCallable)
 		void BuyDamage();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	// Cost to buy more mana regeneration
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Shop")
 		int ManaGoldCost = 50;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	// Cost to buy more energy regeneration
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Shop")
 		int EnergyGoldCost = 25;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	// Cost to restore health
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Shop")
 		int HealthGoldCost = 50;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	// Cost to increase damage
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Shop")
 		int DamageGoldCost = 400;
+
+	// Spawn point for the projectiles
+	UPROPERTY(EditAnywhere)
+		USceneComponent* SparkSpawnpoint;
 
 private:
 
+	// Regenerate mana passively
 	UFUNCTION()
 		void RegenerateMana();
 
+	// Regenerate energy passively
 	UFUNCTION()
 		void RegenerateEnergy();
 
+	// Slowly drain gold from the player
 	UFUNCTION()
 		void StaticDrainGold();
 
+	// Overridden takedamage function so the player can take damage on collision with slimes
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
+	// Dynamic delegate for collision
 	UFUNCTION()
 		void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	// Camera
 	UPROPERTY(EditAnywhere)
 		UCameraComponent* Camera;
 
+	// Spring arm for camera
 	UPROPERTY(EditAnywhere)
 		USpringArmComponent* SpringArm;
 
+	// Class of projectile to spawn
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<ASparks> MagicClass;
 
+	// Game mode reference
 	UPROPERTY()
 		AGamesFourGameModeBase* GameMode;
 
-	UPROPERTY(EditAnywhere)
-		USceneComponent* SparkSpawnpoint;
+
 
 };

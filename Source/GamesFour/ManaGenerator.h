@@ -28,30 +28,38 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+
+	// Static mesh for generator
 	UPROPERTY(EditAnywhere)
 		UStaticMeshComponent* StaticMesh;
 
+	// Trigger box for activation
 	UPROPERTY(EditAnywhere)
 		UBoxComponent* ActivationBox;
 
+	// Energy cost to convert
 	UPROPERTY(EditAnywhere)
 		int EnergyCost = 3;
 
+	// Dynamic Delegates for Trigger box
 	UFUNCTION()
 		void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	
 	UFUNCTION()
 		void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	// Loop to convert mana
 	UFUNCTION()
 		void ManaLoop();
 
+	// Timer for mana conversion
 	UPROPERTY()
 		FTimerHandle ManaTimer;
 
+	// Pawn to recognise the player
 	UPROPERTY()
 		AThirdPersonCharacter* PlayerPawn;
 
+	// Text to explain conversion rate
 	UPROPERTY(EditAnywhere)
 		UTextRenderComponent* TextRender;
 
